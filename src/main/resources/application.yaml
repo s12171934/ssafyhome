@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: ssafy_home
+
+  config:
+    import: classpath:/env.yaml
+
+  data:
+    redis:
+      host: ${redis.host}
+      port: 6379
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${mysql.url}
+    username: ${mysql.username}
+    password: ${mysql.password}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: ${oauth2.google.id}
+            client-secret: ${oauth2.google.secret}
+            redirect-uri: ${oauth2.google.redirect-uri}
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+          naver:
+            client-name: naver
+            client-id: ${oauth2.naver.id}
+            client-secret: ${oauth2.naver.secret}
+            redirect-uri: ${oauth2.naver.redirect-uri}
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+          kakao:
+            client-name: kakao
+            client-id: ${oauth2.kakao.id}
+            client-secret: ${oauth2.kakao.secret}
+            redirect-uri: ${oauth2.kakao.redirect-uri}
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+
+  mail:
+    host: ${mail.host}
+    port: 587
+    username: ${mail.username}
+    password: ${mail.password}
+    properties:
+      mail:
+        smpt:
+          auth: true
+          starttls:
+            enable: true
+
+mybatis:
+  mapper-locations: classpath:mapper/**.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwt:
+  secret: ${jwt-secret}
+
+front-end:
+  url: ${front-end-url}
+
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 90m
