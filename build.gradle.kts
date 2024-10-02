@@ -31,13 +31,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
     implementation("io.jsonwebtoken:jjwt-api:0.12.5")
-    implementation("io.springfox:springfox-boot-starter:3.0.0")
-    implementation("io.springfox:springfox-swagger-ui:3.0.0")
+
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3")
     testImplementation("org.springframework.security:spring-security-test")

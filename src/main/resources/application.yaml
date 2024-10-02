@@ -57,6 +57,14 @@ spring:
           starttls:
             enable: true
 
+springdoc:
+  swagger-ui:
+    path: /swagger-custom-ui.html
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+    doc-expansion: none
+
 mybatis:
   mapper-locations: classpath:mapper/**.xml
   configuration:
