@@ -1,18 +1,36 @@
 package com.ssafyhome.model.dto;
 
+import com.ssafyhome.model.dto.entity.mysql.UserEntity;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Data
 public class CustomUserDetails implements UserDetails {
 
+	private final UserEntity userEntity;
+
+	public CustomUserDetails(UserEntity userEntity) {
+
+		this.userEntity = userEntity;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of();
+
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new GrantedAuthority() {
+			@Override
+			public String getAuthority() {
+
+				return "user";
+			}
+		});
+		return authorities;
 	}
 
 	@Override
@@ -23,5 +41,25 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public String getUsername() {
 		return "";
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }
