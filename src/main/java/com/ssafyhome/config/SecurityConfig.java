@@ -1,9 +1,12 @@
 package com.ssafyhome.config;
 
 import com.ssafyhome.middleware.filter.CustomLoginFilter;
+import com.ssafyhome.middleware.filter.CustomLogoutFilter;
 import com.ssafyhome.middleware.filter.JWTFilter;
 import com.ssafyhome.model.dao.mapper.UserMapper;
 import com.ssafyhome.model.dao.repository.RefreshTokenRepository;
+import com.ssafyhome.model.service.JWTService;
+import com.ssafyhome.util.CookieUtil;
 import com.ssafyhome.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +22,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Collections;
@@ -33,18 +38,21 @@ public class SecurityConfig {
   private final AuthenticationConfiguration authenticationConfiguration;
   private final RefreshTokenRepository refreshTokenRepository;
   private final UserMapper userMapper;
+  private final JWTService jwtService;
   private final JWTUtil jwtUtil;
 
   public SecurityConfig(
       AuthenticationConfiguration authenticationConfiguration,
       RefreshTokenRepository refreshTokenRepository,
       UserMapper userMapper,
+      JWTService jwtService,
       JWTUtil jwtUtil
   ) {
 
     this.authenticationConfiguration = authenticationConfiguration;
     this.refreshTokenRepository = refreshTokenRepository;
     this.userMapper = userMapper;
+    this.jwtService = jwtService;
     this.jwtUtil = jwtUtil;
   }
 
@@ -68,7 +76,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http, CookieUtil cookieUtil) throws Exception {
 
     http.csrf(AbstractHttpConfigurer::disable);
     http.formLogin(AbstractHttpConfigurer::disable);
@@ -77,6 +85,20 @@ public class SecurityConfig {
     http.cors((cors) -> cors
         .configurationSource(this::corsConfiguration)
     );
+
+    CustomLoginFilter customLoginFilter = new CustomLoginFilter(
+        authenticationManager(authenticationConfiguration),
+        jwtService,
+        userMapper
+    );
+    http.addFilterAt(customLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+    CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(
+        refreshTokenRepository,
+        jwtService,
+        cookieUtil
+    );
+    http.addFilterBefore(customLogoutFilter, LogoutFilter.class);
 
     JWTFilter jwtFilter = new JWTFilter(jwtUtil, userMapper);
     http.addFilterBefore(jwtFilter, CustomLoginFilter.class);

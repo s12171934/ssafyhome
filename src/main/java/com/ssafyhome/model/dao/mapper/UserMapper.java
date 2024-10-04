@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
 
   UserEntity getUserBySeqAndEmail(String seq, String email);
+  String getEmailById(String id);
 }
