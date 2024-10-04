@@ -3,11 +3,11 @@ package com.ssafyhome.model.dto;
 import com.ssafyhome.model.dto.entity.mysql.UserEntity;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Data
 public class CustomUserDetails implements UserDetails {
@@ -23,24 +23,18 @@ public class CustomUserDetails implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new GrantedAuthority() {
-			@Override
-			public String getAuthority() {
-
-				return "user";
-			}
-		});
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 		return authorities;
 	}
 
 	@Override
 	public String getPassword() {
-		return "";
+		return userEntity.getUserPw();
 	}
 
 	@Override
 	public String getUsername() {
-		return "";
+		return userEntity.getUserId();
 	}
 
 	@Override
