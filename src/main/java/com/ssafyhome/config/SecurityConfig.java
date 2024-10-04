@@ -1,11 +1,13 @@
 package com.ssafyhome.config;
 
+import com.ssafyhome.handler.CustomOAuth2SuccessHandler;
 import com.ssafyhome.middleware.filter.CustomLoginFilter;
 import com.ssafyhome.middleware.filter.CustomLogoutFilter;
 import com.ssafyhome.middleware.filter.JWTFilter;
 import com.ssafyhome.model.dao.mapper.UserMapper;
 import com.ssafyhome.model.dao.repository.RefreshTokenRepository;
 import com.ssafyhome.model.service.JWTService;
+import com.ssafyhome.model.service.impl.CustomOAuth2UserService;
 import com.ssafyhome.util.CookieUtil;
 import com.ssafyhome.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,13 +42,15 @@ public class SecurityConfig {
   private final UserMapper userMapper;
   private final JWTService jwtService;
   private final JWTUtil jwtUtil;
+  private final CookieUtil cookieUtil;
 
   public SecurityConfig(
       AuthenticationConfiguration authenticationConfiguration,
       RefreshTokenRepository refreshTokenRepository,
       UserMapper userMapper,
       JWTService jwtService,
-      JWTUtil jwtUtil
+      JWTUtil jwtUtil,
+      CookieUtil cookieUtil
   ) {
 
     this.authenticationConfiguration = authenticationConfiguration;
@@ -54,6 +58,7 @@ public class SecurityConfig {
     this.userMapper = userMapper;
     this.jwtService = jwtService;
     this.jwtUtil = jwtUtil;
+    this.cookieUtil = cookieUtil;
   }
 
   @Bean
@@ -76,7 +81,11 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http, CookieUtil cookieUtil) throws Exception {
+  public SecurityFilterChain securityFilterChain(
+      HttpSecurity http,
+      CustomOAuth2UserService customOAuth2UserService,
+      CustomOAuth2SuccessHandler customOAuth2SuccessHandler
+  ) throws Exception {
 
     http.csrf(AbstractHttpConfigurer::disable);
     http.formLogin(AbstractHttpConfigurer::disable);
@@ -102,6 +111,12 @@ public class SecurityConfig {
 
     JWTFilter jwtFilter = new JWTFilter(jwtUtil, userMapper);
     http.addFilterBefore(jwtFilter, CustomLoginFilter.class);
+
+    http.oauth2Login((oauth2) -> oauth2
+        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+            .userService(customOAuth2UserService))
+        .successHandler(customOAuth2SuccessHandler)
+    );
 
     http.sessionManagement((auth) -> auth
         .maximumSessions(1)

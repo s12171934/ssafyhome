@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafyhome.model.dao.mapper.UserMapper">
+    <insert id="insertUser"></insert>
+    <update id="updateUser"></update>
     <select id="getUserBySeqAndEmail" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity"></select>
     <select id="getEmailById" resultType="java.lang.String"></select>
+    <select id="getUserById" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity"></select>
 </mapper>
