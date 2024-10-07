@@ -1,9 +1,90 @@
 package com.ssafyhome.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ssafyhome.model.dto.entity.mysql.NoticeEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@Tag(
+		name = "Notice Controller",
+		description = "관리 운영에 필요한 공지사항"
+)
 @RestController
 @RequestMapping("/notice")
 public class NoticeController {
+
+	@Operation(
+			summary = "",
+			description = ""
+	)
+	@PostMapping("/")
+	@PreAuthorize(
+			value = "hasRole('ROLE_ADMIN')"
+	)
+	public ResponseEntity<?> registerNotice(
+			@RequestBody
+			NoticeEntity noticeEntity
+	) {
+
+		return null;
+	}
+
+	@Operation(
+			summary = "",
+			description = ""
+	)
+	@GetMapping("/detail")
+	public ResponseEntity<NoticeEntity> getNotice(
+			@RequestParam
+			String noticeSeq
+	) {
+
+		return null;
+	}
+
+	@Operation(
+			summary = "",
+			description = ""
+	)
+	@GetMapping("/")
+	public ResponseEntity<List<NoticeEntity>> getNoticeList(
+			@RequestParam
+			Long page
+	) {
+
+		return null;
+	}
+
+	@Operation(
+			summary = "",
+			description = ""
+	)
+	@PutMapping("/{noticeSeq}")
+	public ResponseEntity<?> updateNotice(
+			@PathVariable
+			String noticeSeq,
+
+			@RequestBody
+			NoticeEntity noticeEntity
+	) {
+
+		return null;
+	}
+
+	@Operation(
+			summary = "",
+			description = ""
+	)
+	@DeleteMapping("/{noticeSeq}")
+	public ResponseEntity<?> deleteNotice(
+			@PathVariable
+			String noticeSeq
+	) {
+
+		return null;
+	}
 }
