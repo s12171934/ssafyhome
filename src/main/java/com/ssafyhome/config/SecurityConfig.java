@@ -100,6 +100,7 @@ public class SecurityConfig {
         jwtService,
         userMapper
     );
+    customLoginFilter.setFilterProcessesUrl("/auth/login");
     http.addFilterAt(customLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
     CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(

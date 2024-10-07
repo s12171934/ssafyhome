@@ -14,7 +14,7 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-  private SecretKey secretKey;
+  private final SecretKey secretKey;
 
   public JWTUtil(
       @Value("${jwt.secret}")
