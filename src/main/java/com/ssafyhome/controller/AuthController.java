@@ -2,6 +2,7 @@ package com.ssafyhome.controller;
 
 import com.ssafyhome.model.service.JWTService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,10 @@ public class AuthController {
   )
   @PostMapping("/reissue")
   public ResponseEntity<?> reissue(
+      @Parameter(
+          name = "refresh token",
+          description = "access token을 재발급학기 위한 jwt토큰"
+      )
       @CookieValue(value = "refreshToken", defaultValue = "no_refresh_token")
       String refreshToken
   ) {
