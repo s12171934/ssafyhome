@@ -1,6 +1,7 @@
 package com.ssafyhome.middleware.filter;
 
 import com.ssafyhome.model.dao.mapper.UserMapper;
+import com.ssafyhome.model.dto.entity.mysql.UserEntity;
 import com.ssafyhome.model.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -49,8 +50,10 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
 		String userId = authResult.getName();
-		String userEmail = userMapper.getEmailById(userId);
-		ResponseEntity<?> responseEntity = jwtService.setTokens(userId, userEmail);
+		UserEntity userEntity = userMapper.getUserById(userId);
+		String userSeq = String.valueOf(userEntity.getUserSeq());
+		String userEmail = userEntity.getUserEmail();
+		ResponseEntity<?> responseEntity = jwtService.setTokens(userSeq, userEmail);
 		response.setStatus(HttpStatus.OK.value());
 		responseEntity.getHeaders().forEach((name, values) -> {
 			values.forEach(value -> response.addHeader(name, value));

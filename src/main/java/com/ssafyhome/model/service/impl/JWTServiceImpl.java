@@ -37,9 +37,9 @@ public class JWTServiceImpl implements JWTService {
       return ResponseEntity.badRequest().body(RefreshTokenError);
     }
 
-    String userId = jwtUtil.getKey(refreshToken, "userId");
+    String userSeq = jwtUtil.getKey(refreshToken, "userSeq");
     String userEmail = jwtUtil.getKey(refreshToken, "userEmail");
-    return setTokens(userId, userEmail);
+    return setTokens(userSeq, userEmail);
   }
 
   @Override
@@ -66,10 +66,10 @@ public class JWTServiceImpl implements JWTService {
   }
 
   @Override
-  public ResponseEntity<?> setTokens(String userId, String userEmail) {
+  public ResponseEntity<?> setTokens(String userSeq, String userEmail) {
 
-    String accessToken = jwtUtil.createJWT("access", userId, userEmail, 5 * 60 * 1000L);
-    String refreshToken = jwtUtil.createJWT("refresh", userId, userEmail, 24 * 60 * 60 * 1000L);
+    String accessToken = jwtUtil.createJWT("access", userSeq, userEmail, 5 * 60 * 1000L);
+    String refreshToken = jwtUtil.createJWT("refresh", userSeq, userEmail, 24 * 60 * 60 * 1000L);
 
     return ResponseEntity.ok()
         .header("Authorization", "Bearer " + accessToken)

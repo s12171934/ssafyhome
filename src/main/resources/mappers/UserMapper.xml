@@ -6,11 +6,10 @@
         VALUE (#{userId}, #{userPw}, #{userEmail})
     </insert>
     <update id="updateUser"></update>
-    <select id="getUserBySeqAndEmail" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity"></select>
-    <select id="getEmailById" resultType="java.lang.String">
-        SELECT user_email
+    <select id="getUserBySeqAndEmail" parameterType="string" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity">
+        SELECT *
         FROM user
-        WHERE user_id = #{userId}
+        WHERE user_seq = #{userSeq} AND user_email = #{userEmail}
     </select>
     <select id="getUserById" parameterType="string" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity">
         SELECT *

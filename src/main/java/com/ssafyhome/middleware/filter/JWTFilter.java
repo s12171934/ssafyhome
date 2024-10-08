@@ -1,11 +1,16 @@
 package com.ssafyhome.middleware.filter;
 
 import com.ssafyhome.model.dao.mapper.UserMapper;
+import com.ssafyhome.model.dto.entity.mysql.UserEntity;
+import com.ssafyhome.model.service.impl.CustomUserDetailsService;
 import com.ssafyhome.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -14,14 +19,17 @@ public class JWTFilter extends OncePerRequestFilter {
 
 	private final JWTUtil jwtUtil;
 	private final UserMapper userMapper;
+	private final CustomUserDetailsService userDetailsService;
 
 	public JWTFilter(
 			JWTUtil jwtUtil,
-			UserMapper userMapper
+			UserMapper userMapper,
+			CustomUserDetailsService userDetailsService
 	) {
 
 		this.jwtUtil = jwtUtil;
 		this.userMapper = userMapper;
+		this.userDetailsService = userDetailsService;
 	}
 
 	@Override
@@ -41,17 +49,28 @@ public class JWTFilter extends OncePerRequestFilter {
 		}
 
 		String accessToken = authorizationHeader.substring(7);
-		String category = jwtUtil.getKey(accessToken, "category");
-		String userId = jwtUtil.getKey(accessToken, "userId");
-		String userEmail = jwtUtil.getKey(accessToken, "userEmail");
 
-		if (category.equals("access") ||
-				userMapper.getUserBySeqAndEmail(userId, userEmail) == null
-		) {
+		if (jwtUtil.isExpired(accessToken)) {
 
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
+
+		String category = jwtUtil.getKey(accessToken, "category");
+		String userSeq = jwtUtil.getKey(accessToken, "userSeq");
+		String userEmail = jwtUtil.getKey(accessToken, "userEmail");
+		UserEntity userEntity = userMapper.getUserBySeqAndEmail(userSeq, userEmail);
+
+		if (!category.equals("access") || userEntity == null) {
+
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		}
+
+		UserDetails userDetails = userDetailsService.loadUserByUsername(userEntity.getUserId());
+		UsernamePasswordAuthenticationToken authenticationToken =
+				new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
 		filterChain.doFilter(request, response);
 	}

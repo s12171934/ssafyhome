@@ -51,11 +51,11 @@ public class JWTUtil {
     }
   }
 
-  public String createJWT(String category, String userId, String userEmail, Long expiration) {
+  public String createJWT(String category, String userSeq, String userEmail, Long expiration) {
 
     return Jwts.builder()
         .claim("category", category)
-        .claim("userId", userId)
+        .claim("userSeq", userSeq)
         .claim("userEmail", userEmail)
         .issuedAt(new Date(System.currentTimeMillis()))
         .expiration(new Date(System.currentTimeMillis() + expiration))

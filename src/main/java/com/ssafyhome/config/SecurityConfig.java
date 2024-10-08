@@ -8,6 +8,7 @@ import com.ssafyhome.model.dao.mapper.UserMapper;
 import com.ssafyhome.model.dao.repository.RefreshTokenRepository;
 import com.ssafyhome.model.service.JWTService;
 import com.ssafyhome.model.service.impl.CustomOAuth2UserService;
+import com.ssafyhome.model.service.impl.CustomUserDetailsService;
 import com.ssafyhome.util.CookieUtil;
 import com.ssafyhome.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -32,6 +34,7 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
   @Value("${front-end.url}")
@@ -43,6 +46,7 @@ public class SecurityConfig {
   private final JWTService jwtService;
   private final JWTUtil jwtUtil;
   private final CookieUtil cookieUtil;
+  private final CustomUserDetailsService userDetailsService;
 
   public SecurityConfig(
       AuthenticationConfiguration authenticationConfiguration,
@@ -50,7 +54,8 @@ public class SecurityConfig {
       UserMapper userMapper,
       JWTService jwtService,
       JWTUtil jwtUtil,
-      CookieUtil cookieUtil
+      CookieUtil cookieUtil,
+      CustomUserDetailsService userDetailsService
   ) {
 
     this.authenticationConfiguration = authenticationConfiguration;
@@ -59,6 +64,7 @@ public class SecurityConfig {
     this.jwtService = jwtService;
     this.jwtUtil = jwtUtil;
     this.cookieUtil = cookieUtil;
+    this.userDetailsService = userDetailsService;
   }
 
   @Bean
@@ -84,12 +90,12 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(
       HttpSecurity http,
       CustomOAuth2UserService customOAuth2UserService,
-      CustomOAuth2SuccessHandler customOAuth2SuccessHandler
-  ) throws Exception {
+      CustomOAuth2SuccessHandler customOAuth2SuccessHandler) throws Exception {
 
     http.csrf(AbstractHttpConfigurer::disable);
     http.formLogin(AbstractHttpConfigurer::disable);
     http.httpBasic(AbstractHttpConfigurer::disable);
+    http.exceptionHandling(AbstractHttpConfigurer::disable);
 
     http.cors((cors) -> cors
         .configurationSource(this::corsConfiguration)
@@ -110,7 +116,7 @@ public class SecurityConfig {
     );
     http.addFilterBefore(customLogoutFilter, LogoutFilter.class);
 
-    JWTFilter jwtFilter = new JWTFilter(jwtUtil, userMapper);
+    JWTFilter jwtFilter = new JWTFilter(jwtUtil, userMapper, userDetailsService);
     http.addFilterBefore(jwtFilter, CustomLoginFilter.class);
 
     http.oauth2Login((oauth2) -> oauth2
