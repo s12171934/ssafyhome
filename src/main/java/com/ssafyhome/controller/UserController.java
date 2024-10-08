@@ -4,6 +4,7 @@ import com.ssafyhome.model.dto.FindUserDto;
 import com.ssafyhome.model.dto.PasswordDto;
 import com.ssafyhome.model.dto.UserDto;
 import com.ssafyhome.model.dto.UserSearchDto;
+import com.ssafyhome.model.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,13 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+	private final UserService userService;
+
+	public UserController(UserService userService) {
+
+		this.userService = userService;
+	}
+
 	@Operation(
 			summary = "",
 			description = ""
@@ -29,7 +37,7 @@ public class UserController {
 			UserDto userDto
 	) {
 
-		return null;
+		return userService.register(userDto);
 	}
 
 	@Operation(

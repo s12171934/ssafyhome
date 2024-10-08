@@ -8,10 +8,13 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.tags.Tag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +53,28 @@ public class SwaggerConfig {
                             .addProperties("username", new Schema<>().type("string"))
                             .addProperties("password", new Schema<>().type("string"))
                         )
+                )
+            )
+        )
+        .responses(new ApiResponses()
+            .addApiResponse("200", new ApiResponse()
+                .description("로그인 성공")
+                .addHeaderObject("Set-Cookie", new Header()
+                    .description("Refresh token")
+                    .schema(new Schema<>().type("string"))
+                )
+                .addHeaderObject("Authorization", new Header()
+                    .description("Access token")
+                    .schema(new Schema<>().type("string"))
+                )
+                .content(new Content()
+                    .addMediaType("application/json",
+                        new MediaType()
+                            .schema(new Schema<>()
+                                .type("object")
+                                .addProperties("message", new Schema<>().type("string").example("로그인 성공"))
+                            )
+                    )
                 )
             )
         );

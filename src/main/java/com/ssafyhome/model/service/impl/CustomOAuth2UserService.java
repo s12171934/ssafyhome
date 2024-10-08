@@ -43,8 +43,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			UserEntity userEntity = new UserEntity();
 			userEntity.setUserId(userId);
 			userEntity.setUserEmail(oAuth2Response.getEmail());
-			userMapper.insertUser(userEntity);
-			existUser = userEntity;
+      try {
+        userMapper.insertUser(userEntity);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+      existUser = userEntity;
 		}
 		else {
 			existUser.setUserEmail(oAuth2Response.getEmail());
