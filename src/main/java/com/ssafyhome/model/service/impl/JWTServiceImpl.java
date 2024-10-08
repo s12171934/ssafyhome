@@ -72,7 +72,7 @@ public class JWTServiceImpl implements JWTService {
     String refreshToken = jwtUtil.createJWT("refresh", userId, userEmail, 24 * 60 * 60 * 1000L);
 
     return ResponseEntity.ok()
-        .header("Authorization", accessToken)
+        .header("Authorization", "Bearer " + accessToken)
         .header("Cookie", refreshToken)
         .build();
   }

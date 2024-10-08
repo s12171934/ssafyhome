@@ -27,12 +27,20 @@ public class JWTFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-		String accessToken = request.getHeader("Authorization");
-		if (accessToken == null) {
+		String authorizationHeader = request.getHeader("Authorization");
+		if (authorizationHeader == null) {
+
 			filterChain.doFilter(request, response);
 			return;
 		}
 
+		if (!authorizationHeader.startsWith("Bearer ")) {
+
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		}
+
+		String accessToken = authorizationHeader.substring(7);
 		String category = jwtUtil.getKey(accessToken, "category");
 		String userId = jwtUtil.getKey(accessToken, "userId");
 		String userEmail = jwtUtil.getKey(accessToken, "userEmail");
