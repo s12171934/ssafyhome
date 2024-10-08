@@ -1,6 +1,5 @@
 package com.ssafyhome.controller;
 
-import com.ssafyhome.handler.accessdeniedhandler.AccessDeniedHandler;
 import com.ssafyhome.model.dto.NavigateDto;
 import com.ssafyhome.model.dto.SpotSearchDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,8 +41,7 @@ public class NavigateController {
 			description = ""
 	)
 	@GetMapping("/bookmark")
-	@PreAuthorize("isAuthenticated()")
-	@AccessDeniedHandler
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<NavigateDto>> getTimeWithCustomSpots(
 			@RequestParam
 			String houseSeq

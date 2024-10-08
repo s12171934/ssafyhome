@@ -51,7 +51,7 @@ public class JWTServiceImpl implements JWTService {
   @Override
   public String checkRefreshTokenError(String refreshToken) {
 
-    if (refreshToken.equals("no_refresh_token")) {
+    if (refreshToken == null || refreshToken.equals("no_refresh_token")) {
       return "refresh token not found";
     }
 
