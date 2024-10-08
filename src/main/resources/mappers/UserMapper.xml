@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafyhome.model.dao.mapper.UserMapper">
-    <insert id="insertUser"></insert>
+    <insert id="insertUser" parameterType="com.ssafyhome.model.dto.entity.mysql.UserEntity">
+        INSERT INTO user (user_id, user_pw, user_email)
+        VALUE (#{userId}, #{userPw}, #{userEmail})
+    </insert>
     <update id="updateUser"></update>
     <select id="getUserBySeqAndEmail" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity"></select>
-    <select id="getEmailById" resultType="java.lang.String"></select>
-    <select id="getUserById" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity"></select>
+    <select id="getEmailById" resultType="java.lang.String">
+        SELECT user_email
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+    <select id="getUserById" parameterType="string" resultType="com.ssafyhome.model.dto.entity.mysql.UserEntity">
+        SELECT *
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
 </mapper>

@@ -9,6 +9,6 @@ public interface UserMapper {
   UserEntity getUserBySeqAndEmail(String seq, String email);
   UserEntity getUserById(String id);
   String getEmailById(String id);
-  void insertUser(UserEntity user);
+  void insertUser(UserEntity user) throws Exception;
   void updateUser(UserEntity user);
 }
