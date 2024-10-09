@@ -43,9 +43,9 @@ public class JWTServiceImpl implements JWTService {
   }
 
   @Override
-  public void saveRefreshTokenToRedis(String refreshToken, String userId) {
+  public void saveRefreshTokenToRedis(String refreshToken, String userSeq) {
 
-    refreshTokenRepository.save(new RefreshTokenEntity(refreshToken, userId));
+    refreshTokenRepository.save(new RefreshTokenEntity(refreshToken, userSeq));
   }
 
   @Override
@@ -70,6 +70,8 @@ public class JWTServiceImpl implements JWTService {
 
     String accessToken = jwtUtil.createJWT("access", userSeq, userEmail, 5 * 60 * 1000L);
     String refreshToken = jwtUtil.createJWT("refresh", userSeq, userEmail, 24 * 60 * 60 * 1000L);
+
+    saveRefreshTokenToRedis(refreshToken, userSeq);
 
     return ResponseEntity.ok()
         .header("Authorization", "Bearer " + accessToken)

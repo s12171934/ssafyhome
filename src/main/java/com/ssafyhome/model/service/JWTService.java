@@ -7,7 +7,7 @@ public interface JWTService {
 
   ResponseEntity<?> reissueRefreshToken(String refreshToken);
 
-  void saveRefreshTokenToRedis(String refreshToken, String userId);
+  void saveRefreshTokenToRedis(String refreshToken, String userSeq);
 
   String checkRefreshTokenError(String refreshToken);
 
