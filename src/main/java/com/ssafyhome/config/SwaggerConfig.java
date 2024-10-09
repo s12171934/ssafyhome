@@ -4,6 +4,7 @@ package com.ssafyhome.config;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -24,7 +25,8 @@ import org.springframework.context.annotation.Configuration;
     info = @Info(
         title = "SSAFY HOME",
         description = "ssafy home 아파트 매매 정보 시스템"
-    )
+    ),
+    security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(
     name = "bearerAuth",
