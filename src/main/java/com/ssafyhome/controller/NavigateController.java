@@ -41,12 +41,12 @@ public class NavigateController {
 			description = ""
 	)
 	@GetMapping("/bookmark")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<List<NavigateDto>> getTimeWithCustomSpots(
 			@RequestParam
 			String houseSeq
 	) {
-		SecurityContext securityContext = SecurityContextHolder.getContext();
+
 		return null;
 	}
 

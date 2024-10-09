@@ -5,6 +5,7 @@ import com.ssafyhome.model.dto.entity.mysql.ReviewEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ReviewController {
 			description = ""
 	)
 	@PostMapping("/")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> registerReview(
 			@RequestBody
 			ReviewEntity reviewEntity
@@ -35,6 +37,7 @@ public class ReviewController {
 			description = ""
 	)
 	@GetMapping("/list")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ReviewEntity>> getReview(
 			@RequestBody
 			ReviewSearchDto reviewSearchDto
@@ -48,6 +51,7 @@ public class ReviewController {
 			description = ""
 	)
 	@PutMapping("/{reviewSeq}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> updateReview(
 			@PathVariable
 			String reviewSeq,
@@ -64,6 +68,7 @@ public class ReviewController {
 			description = ""
 	)
 	@DeleteMapping("/{reviewSeq}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> deleteReview(
 			@PathVariable
 			String reviewSeq
