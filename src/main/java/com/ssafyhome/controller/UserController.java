@@ -8,6 +8,8 @@ import com.ssafyhome.model.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,11 +63,11 @@ public class UserController {
 			description = ""
 	)
 	@GetMapping("/")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or  #userSeq == authentication.name")
 	public ResponseEntity<UserDto> getUserInfo(
 			@RequestParam
 			String userSeq
 	) {
-
 		return null;
 	}
 
@@ -74,6 +76,7 @@ public class UserController {
 			description = ""
 	)
 	@GetMapping("/list")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<UserDto>> getUserList(
 			@RequestBody
 			UserSearchDto userSearchDto
@@ -129,6 +132,7 @@ public class UserController {
 			description = ""
 	)
 	@PutMapping("/{userSeq}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or  #userSeq == authentication.name")
 	public ResponseEntity<?> updateUserInfo(
 			@PathVariable
 			String userSeq,
@@ -145,6 +149,7 @@ public class UserController {
 			description = ""
 	)
 	@DeleteMapping("/{userSeq}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or  #userSeq == authentication.name")
 	public ResponseEntity<?> deleteUser(
 			@PathVariable
 			String userSeq

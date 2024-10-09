@@ -4,6 +4,7 @@ import com.ssafyhome.model.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -108,6 +109,7 @@ public class HouseController {
 			description = ""
 	)
 	@PostMapping("/deal")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> updateHouseDealsInfo() {
 
 		return null;
@@ -118,6 +120,7 @@ public class HouseController {
 			description = ""
 	)
 	@PostMapping("/")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> updateHouseInfo() {
 
 		return null;

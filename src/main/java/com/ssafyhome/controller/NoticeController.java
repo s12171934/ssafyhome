@@ -22,9 +22,7 @@ public class NoticeController {
 			description = ""
 	)
 	@PostMapping("/")
-	@PreAuthorize(
-			value = "hasRole('ROLE_ADMIN')"
-	)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> registerNotice(
 			@RequestBody
 			NoticeEntity noticeEntity
@@ -64,6 +62,7 @@ public class NoticeController {
 			description = ""
 	)
 	@PutMapping("/{noticeSeq}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> updateNotice(
 			@PathVariable
 			String noticeSeq,
@@ -80,6 +79,7 @@ public class NoticeController {
 			description = ""
 	)
 	@DeleteMapping("/{noticeSeq}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteNotice(
 			@PathVariable
 			String noticeSeq

@@ -4,6 +4,7 @@ import com.ssafyhome.model.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +23,12 @@ public class BookmarkController {
 			description = "사용자가 보고 있는 지역을 관심지역으로 등록"
 	)
 	@PostMapping("/location")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> addLocation(
 			@RequestBody
 			String dongCode
+
+
 	) {
 
 		return null;
@@ -35,6 +39,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@PostMapping("/house")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> addHouse(
 			@RequestBody
 			String houseId
@@ -48,6 +53,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@PostMapping("/custom")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> addCustomSpot(
 			@RequestBody
 			CustomSpotDto customSpotDto
@@ -61,6 +67,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@GetMapping("/location")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<List<LocationDto>> getLocations() {
 
 		return null;
@@ -71,6 +78,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@GetMapping("/house")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<List<HouseDto>> getHouses() {
 
 		return null;
@@ -81,6 +89,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@GetMapping("/custom")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<List<CustomSpotDto>> getCustomSpots() {
 
 		return null;
@@ -91,6 +100,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@GetMapping("/status")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<List<BookmarkStatusDto>> getStatus() {
 
 		return null;
@@ -101,6 +111,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@DeleteMapping("/location/{dongCode}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> deleteLocation(
 			@PathVariable
 			String dongCode
@@ -114,6 +125,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@DeleteMapping("/house/{houseId}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> deleteHouse(
 			@PathVariable
 			String houseId
@@ -127,6 +139,7 @@ public class BookmarkController {
 			description = ""
 	)
 	@DeleteMapping("/custom/{customSeq}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> deleteCustomSpot(
 			@PathVariable
 			String customSeq
