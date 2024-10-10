@@ -4,6 +4,8 @@ import com.ssafyhome.model.dto.FindUserDto;
 import com.ssafyhome.model.dto.PasswordDto;
 import com.ssafyhome.model.dto.UserDto;
 import com.ssafyhome.model.dto.UserSearchDto;
+import com.ssafyhome.model.dto.entity.mysql.UserEntity;
+import com.ssafyhome.model.dto.entity.redis.EmailSecretEntity;
 import com.ssafyhome.model.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,7 +57,9 @@ public class UserController {
 			FindUserDto findUserDto
 	) {
 
-		return null;
+		return type.equals("id") ?
+				userService.findUserId(findUserDto) :
+				userService.findPassword(findUserDto);
 	}
 
 	@Operation(
@@ -82,7 +86,7 @@ public class UserController {
 			String userSeq
 	) {
 
-		return null;
+		return userService.getUserInfo(userSeq);
 	}
 
 	@Operation(
@@ -96,7 +100,7 @@ public class UserController {
 			UserSearchDto userSearchDto
 	) {
 
-		return null;
+		return userService.getUserList(userSearchDto);
 	}
 
 	@Operation(
@@ -106,10 +110,13 @@ public class UserController {
 	@GetMapping("/check/mail")
 	public ResponseEntity<?> checkEmailSecret(
 			@RequestParam
+			String email,
+
+			@RequestParam
 			String key
 	) {
 
-		return null;
+		return userService.checkEmailSecret(new EmailSecretEntity(email, key));
 	}
 
 	@Operation(
@@ -122,7 +129,7 @@ public class UserController {
 			String userId
 	) {
 
-		return null;
+		return userService.checkIdDuplicate(userId);
 	}
 
 	@Operation(
@@ -131,14 +138,14 @@ public class UserController {
 	)
 	@PatchMapping("/{userSeq}")
 	public ResponseEntity<?> changePassword(
-			@PathVariable
+			@PathVariable(required = false)
 			String userSeq,
 
 			@RequestBody
 			PasswordDto passwordDto
 	) {
 
-		return null;
+		return userService.changePassword(userSeq, passwordDto);
 	}
 
 	@Operation(
@@ -152,10 +159,10 @@ public class UserController {
 			String userSeq,
 
 			@RequestBody
-			UserDto userDto
+			UserEntity userEntity
 	) {
 
-		return null;
+		return userService.updateUser(userEntity);
 	}
 
 	@Operation(
@@ -169,6 +176,6 @@ public class UserController {
 			String userSeq
 	) {
 
-		return null;
+		return userService.deleteUser(userSeq);
 	}
 }
