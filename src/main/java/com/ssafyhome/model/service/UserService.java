@@ -6,4 +6,5 @@ import org.springframework.http.ResponseEntity;
 public interface UserService {
 
   ResponseEntity<?> register(UserDto userDto);
+  ResponseEntity<?> sendEmail(String email);
 }
