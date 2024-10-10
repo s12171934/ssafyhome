@@ -62,12 +62,26 @@ public class UserController {
 			summary = "",
 			description = ""
 	)
+	@PostMapping("/send/mail")
+	public ResponseEntity<?> sendEmail(
+			@RequestBody
+			String email
+	) {
+
+		return userService.sendEmail(email);
+	}
+
+	@Operation(
+			summary = "",
+			description = ""
+	)
 	@GetMapping("/")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or  #userSeq == authentication.name")
 	public ResponseEntity<UserDto> getUserInfo(
 			@RequestParam
 			String userSeq
 	) {
+
 		return null;
 	}
 
